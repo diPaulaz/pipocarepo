@@ -81,6 +81,18 @@
             white-space: pre-wrap;
             font-family: monospace;
         }
+        #copy-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+         #copy-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -113,6 +125,7 @@
             <button id="reset-all-button">Limpar Todas as Seleções</button>
         </div>
         <div id="generated-list"></div>
+        <button id="copy-button">Copiar Lista</button>
     </div>
 
     <script>
@@ -289,6 +302,20 @@
 
         // Initialize
         populateItems();
+
+        document.getElementById('copy-button').addEventListener('click', () => {
+    const generatedList = document.getElementById('generated-list').textContent;
+
+    if (generatedList.trim() !== '') {
+        navigator.clipboard.writeText(generatedList).then(() => {
+            alert('Lista copiada para a área de transferência!');
+        }).catch(err => {
+            console.error('Erro ao copiar a lista:', err);
+        });
+    } else {
+        alert('A lista está vazia e não pode ser copiada.');
+    }
+});
     </script>
 </body>
   </html>
