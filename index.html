@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Reposição</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+        .tab-btn.active {
+            background-color: #007bff;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 15px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .item-status {
+            display: flex;
+            align-items: center;
+        }
+        .item-status label {
+            margin-right: 10px;
+        }
+        .control-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .control-buttons button {
+            padding: 10px;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #generate-button {
+            background-color: #28a745;
+        }
+        #generate-button:hover {
+            background-color: #218838;
+        }
+        #reset-tab-button {
+            background-color: #ffc107;
+            color: black;
+        }
+        #reset-all-button {
+            background-color: #dc3545;
+        }
+        #generated-list {
+            margin-top: 15px;
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 15px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Reposição</h1>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="embalagens">Embalagens</button>
+            <button class="tab-btn" data-tab="insumos">Insumos</button>
+            <button class="tab-btn" data-tab="utilitarios">Utilitários</button>
+            <button class="tab-btn" data-tab="bebidas">Bebidas</button>
+        </div>
+
+        <div id="embalagens" class="tab-content active">
+            <!-- Embalagens items will be dynamically populated -->
+        </div>
+        <div id="insumos" class="tab-content">
+            <!-- Insumos items will be dynamically populated -->
+        </div>
+        <div id="utilitarios" class="tab-content">
+            <!-- Utilitários items will be dynamically populated -->
+        </div>
+        <div id="bebidas" class="tab-content">
+            <!-- Bebidas items will be dynamically populated -->
+        </div>
+
+        <div class="control-buttons">
+            <button id="generate-button">Gerar Lista</button>
+            <button id="reset-tab-button">Limpar Aba Atual</button>
+            <button id="reset-all-button">Limpar Todas as Seleções</button>
+        </div>
+        <div id="generated-list"></div>
+    </div>
+
+    <script>
+        const itemLists = {
+            embalagens: [
+                "Embalagem de 8",
+                "Embalagem de 10",
+                "Embalagem de 15"
+            ],
+            insumos: [
+                "Milho",
+                "Óleo",
+                "Sal de preparo",
+                "Açúcar", 
+                "Essência vermelha", 
+                "Essência de manteiga", 
+                "Essência de coco", 
+                "Leite condensado"
+            ],
+            utilitarios: [
+                "Guardanapos",
+                "Canudos", 
+                "Sal em sachê", 
+                "Papel toalha",
+                "Saco de lixo"
+            ],
+            bebidas: [
+                "Água sem gás",
+                "Água com gás",
+                "Coca-Cola",
+                "Coca-Cola Zero",
+                "Guaraná Antártica",
+                "Guaraná Antártica Zero",
+                "Fanta-Uva",
+                "Fanta-Laranja",
+                "Schweppes Citrus",
+                "Pepsi",
+                "Sprite",
+                "H2O Limão",
+                "H2O Limoneto",
+                "Monster",
+                "Redbull",
+                "Guaravita",
+                "Guaraviton",
+                "Gatorade",
+                "Ice Tea",
+                "Mate",
+                "Mineirinho",
+                "Del Valle"
+            ]
+
+        };
+
+        // Tab switching
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                btn.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Populate items dynamically
+        function populateItems() {
+            Object.keys(itemLists).forEach(category => {
+                const container = document.getElementById(category);
+                container.innerHTML = itemLists[category].map((itemName, index) => `
+                    <div class="item">
+                        <span>${itemName}</span>
+                        <div class="item-status">
+                            <label>
+                                <input type="radio" name="${category}-${index}" value="tem"> Tem
+                            </label>
+                            <label>
+                                <input type="radio" name="${category}-${index}" value="acabou"> Acabou
+                            </label>
+                            <input 
+                                type="number" 
+                                min="0" 
+                                class="quantity-input" 
+                                style="display:none; width: 60px; margin-left: 10px;"
+                            >
+                        </div>
+                    </div>
+                `).join('');
+
+                // Event listeners for radio buttons and quantity inputs
+                container.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        const quantityInput = this.closest('.item-status').querySelector('.quantity-input');
+                        quantityInput.style.display = this.value === 'tem' ? 'block' : 'none';
+                        
+                        // Uncheck other radio in the same group
+                        const radioGroup = document.getElementsByName(this.name);
+                        radioGroup.forEach(r => {
+                            if (r !== this) r.checked = false;
+                        });
+                    });
+                });
+            });
+        }
+
+        // Generate list functionality
+        document.getElementById('generate-button').addEventListener('click', () => {
+            let reportText = "📋 Lista de Reposição:\n\n";
+            
+            Object.keys(itemLists).forEach(category => {
+                const categoryContainer = document.getElementById(category);
+                const categoryItems = categoryContainer.querySelectorAll('.item');
+                const reportCategory = [];
+
+                categoryItems.forEach(item => {
+                    const itemName = item.querySelector('span').textContent;
+                    const temRadio = item.querySelector('input[value="tem"]');
+                    const acabouRadio = item.querySelector('input[value="acabou"]');
+                    const quantityInput = item.querySelector('.quantity-input');
+
+                    if (acabouRadio.checked) {
+                        reportCategory.push(`❌ ${itemName} - ACABOU`);
+                    } else if (temRadio.checked) {
+                        const quantityText = quantityInput.value 
+                            ? ` - ${quantityInput.value}` 
+                            : '';
+                        reportCategory.push(`✅ ${itemName}${quantityText}`);
+                    }
+                });
+
+                if (reportCategory.length > 0) {
+                    reportText += `*${category.charAt(0).toUpperCase() + category.slice(1)}:*\n`;
+                    reportText += reportCategory.join('\n') + '\n\n';
+                }
+            });
+
+            // Display in the generated list div
+            document.getElementById('generated-list').textContent = reportText;
+        });
+
+        // Reset current tab functionality
+        document.getElementById('reset-tab-button').addEventListener('click', () => {
+            // Find the currently active tab content
+            const activeTabContent = document.querySelector('.tab-content.active');
+            
+            // Reset all radios and quantity inputs in the current tab
+            activeTabContent.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            activeTabContent.querySelectorAll('.quantity-input').forEach(input => {
+                input.value = '';
+                input.style.display = 'none';
+            });
+        });
+
+        // Reset all tabs functionality
+        document.getElementById('reset-all-button').addEventListener('click', () => {
+            // Reset all radios and quantity inputs across all tabs
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                input.value = '';
+                input.style.display = 'none';
+            });
+            
+            // Clear generated list
+            document.getElementById('generated-list').textContent = '';
+        });
+
+        // Initialize
+        populateItems();
+    </script>
+</body>
+  </html>
