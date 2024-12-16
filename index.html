@@ -44,7 +44,13 @@
         }
         .item-status {
             display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        .item-status-row {
+            display: flex;
             align-items: center;
+            margin-top: 5px;
         }
         .item-status label {
             margin-right: 10px;
@@ -89,9 +95,15 @@
             cursor: pointer;
             margin-top: 10px;
         }
-        
-         #copy-button:hover {
+        #copy-button:hover {
             background-color: #0056b3;
+        }
+        .location-options {
+            display: none;
+            margin-top: 5px;
+        }
+        .location-options label {
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -107,7 +119,7 @@
         </div>
 
         <div id="embalagens" class="tab-content active">
-            <!-- Embalagens items will be dynamically populated -->
+    
         </div>
         <div id="insumos" class="tab-content">
             <!-- Insumos items will be dynamically populated -->
@@ -176,7 +188,6 @@
                 "Mineirinho",
                 "Del Valle"
             ]
-
         };
 
         // Tab switching
@@ -199,32 +210,64 @@
         function populateItems() {
             Object.keys(itemLists).forEach(category => {
                 const container = document.getElementById(category);
-                container.innerHTML = itemLists[category].map((itemName, index) => `
+                container.innerHTML = itemLists[category].map((itemName, index) => {
+                    const isBebida = category === 'bebidas';
+                    return `
                     <div class="item">
                         <span>${itemName}</span>
                         <div class="item-status">
-                            <label>
-                                <input type="radio" name="${category}-${index}" value="tem"> Tem
-                            </label>
-                            <label>
-                                <input type="radio" name="${category}-${index}" value="acabou"> Acabou
-                            </label>
-                            <input 
- type="text" 
-    class="quantity-input" 
-    style="display:none; width: 100px; margin-left: 10px;"
-    placeholder="Qtd (opcional)"
->
+                            <div class="item-status-row">
+                                <label>
+                                    <input type="radio" name="${category}-${index}" value="tem" 
+                                        ${isBebida ? 'data-show-location="true"' : ''}> Tem
+                                </label>
+                                <label>
+                                    <input type="radio" name="${category}-${index}" value="acabou"> Acabou
+                                </label>
+                                <input 
+                                    type="text" 
+                                    class="quantity-input" 
+                                    style="display:none; width: 100px; margin-left: 10px;"
+                                    placeholder="Info adicional"
+                                >
+                            </div>
+                            ${isBebida ? `
+                            <div class="location-options">
+                                <div class="item-status-row">
+                                    <label>
+                                        <input type="radio" name="${category}-${index}-location" value="estoque-geladeira"> Estoque e Geladeira
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="${category}-${index}-location" value="so-geladeira"> Só Geladeira
+                                    </label>
+                                </div>
+                            </div>` : ''}
                         </div>
                     </div>
-                `).join('');
+                `}).join('');
 
                 // Event listeners for radio buttons and quantity inputs
                 container.querySelectorAll('input[type="radio"]').forEach(radio => {
                     radio.addEventListener('change', function() {
-                        const quantityInput = this.closest('.item-status').querySelector('.quantity-input');
+                        const itemStatus = this.closest('.item-status');
+                        const quantityInput = itemStatus.querySelector('.quantity-input');
+                        const locationOptions = itemStatus.querySelector('.location-options');
+                        
                         // Mostrar a caixa de texto para ambas as opções
                         quantityInput.style.display = 'block';
+                        
+                        // Para bebidas, mostrar ou esconder opções de localização
+                        if (this.dataset.showLocation) {
+                            if (this.value === 'tem') {
+                                locationOptions.style.display = 'block';
+                            } else {
+                                locationOptions.style.display = 'none';
+                                // Desmarcar opções de localização
+                                locationOptions.querySelectorAll('input[type="radio"]').forEach(locRadio => {
+                                    locRadio.checked = false;
+                                });
+                            }
+                        }
                         
                         // Uncheck other radio in the same group
                         const radioGroup = document.getElementsByName(this.name);
@@ -250,14 +293,30 @@
                     const temRadio = item.querySelector('input[value="tem"]');
                     const acabouRadio = item.querySelector('input[value="acabou"]');
                     const quantityInput = item.querySelector('.quantity-input');
+                    
+                    // Adicional para bebidas
+                    const locationRadios = item.querySelectorAll('input[name$="-location"]');
+                    let locationText = '';
 
                     if (acabouRadio.checked) {
-                        reportCategory.push(`❌ ${itemName} - ACABOU`);
+                        reportCategory.push(`❌ ${itemName} `);
                     } else if (temRadio.checked) {
+                        // Verificar opção de localização para bebidas
+                        if (locationRadios.length > 0) {
+                            const estoqueGeladeira = item.querySelector('input[value="estoque-geladeira"]');
+                            const soGeladeira = item.querySelector('input[value="so-geladeira"]');
+                            
+                            if (estoqueGeladeira.checked) {
+                                locationText = ' (Estoque e geladeira)';
+                            } else if (soGeladeira.checked) {
+                                locationText = ' (Só geladeira)';
+                            }
+                        }
+
                         const quantityText = quantityInput.value 
                             ? ` - ${quantityInput.value}` 
                             : '';
-                        reportCategory.push(`✅ ${itemName}${quantityText}`);
+                        reportCategory.push(`✅ ${itemName}${quantityText}${locationText}`);
                     }
                 });
 
@@ -284,6 +343,9 @@
                 input.value = '';
                 input.style.display = 'none';
             });
+            activeTabContent.querySelectorAll('.location-options').forEach(locationOptions => {
+                locationOptions.style.display = 'none';
+            });
         });
 
         // Reset all tabs functionality
@@ -296,27 +358,31 @@
                 input.value = '';
                 input.style.display = 'none';
             });
+            document.querySelectorAll('.location-options').forEach(locationOptions => {
+                locationOptions.style.display = 'none';
+            });
             
             // Clear generated list
             document.getElementById('generated-list').textContent = '';
         });
 
+        // Copy functionality
+        document.getElementById('copy-button').addEventListener('click', () => {
+            const generatedList = document.getElementById('generated-list').textContent;
+
+            if (generatedList.trim() !== '') {
+                navigator.clipboard.writeText(generatedList).then(() => {
+                    alert('Lista copiada para a área de transferência!');
+                }).catch(err => {
+                    console.error('Erro ao copiar a lista:', err);
+                });
+            } else {
+                alert('A lista está vazia e não pode ser copiada.');
+            }
+        });
+
         // Initialize
         populateItems();
-
-        document.getElementById('copy-button').addEventListener('click', () => {
-    const generatedList = document.getElementById('generated-list').textContent;
-
-    if (generatedList.trim() !== '') {
-        navigator.clipboard.writeText(generatedList).then(() => {
-            alert('Lista copiada para a área de transferência!');
-        }).catch(err => {
-            console.error('Erro ao copiar a lista:', err);
-        });
-    } else {
-        alert('A lista está vazia e não pode ser copiada.');
-    }
-});
     </script>
 </body>
 </html>
