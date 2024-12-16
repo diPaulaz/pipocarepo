@@ -221,17 +221,18 @@
 
                 // Event listeners for radio buttons and quantity inputs
                 container.querySelectorAll('input[type="radio"]').forEach(radio => {
-                    radio.addEventListener('change', function() {
-                        const quantityInput = this.closest('.item-status').querySelector('.quantity-input');
-                        quantityInput.style.display = this.value === 'tem' ? 'block' : 'none';
-                        
-                        // Uncheck other radio in the same group
-                        const radioGroup = document.getElementsByName(this.name);
-                        radioGroup.forEach(r => {
-                            if (r !== this) r.checked = false;
-                        });
-                    });
-                });
+    radio.addEventListener('change', function() {
+        const quantityInput = this.closest('.item-status').querySelector('.quantity-input');
+        // Removido o condicional limitando a exibição apenas para 'tem'
+        quantityInput.style.display = this.value === 'acabou' ? 'block' : 'none';
+        
+        // Uncheck other radio in the same group
+        const radioGroup = document.getElementsByName(this.name);
+        radioGroup.forEach(r => {
+            if (r !== this) r.checked = false;
+        });
+    });
+});
             });
         }
 
