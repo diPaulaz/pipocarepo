@@ -12,27 +12,27 @@
             padding: 20px;
             background-color: #f4f4f4;
         }
-        .tabs {
+        .abas {
             display: flex;
             margin-bottom: 20px;
         }
-        .tab-btn {
+        .botao-aba {
             padding: 10px 15px;
             border: 1px solid #ddd;
             background-color: #f1f1f1;
             cursor: pointer;
         }
-        .tab-btn.active {
+        .botao-aba.ativo {
             background-color: #007bff;
             color: white;
         }
-        .tab-content {
+        .conteudo-aba {
             display: none;
             background-color: white;
             border: 1px solid #ddd;
             padding: 15px;
         }
-        .tab-content.active {
+        .conteudo-aba.ativo {
             display: block;
         }
         .item {
@@ -42,44 +42,44 @@
             padding: 10px;
             border-bottom: 1px solid #eee;
         }
-        .item-status {
+        .status-item {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
         }
-        .item-status-row {
+        .linha-status-item {
             display: flex;
             align-items: center;
             margin-top: 5px;
         }
-        .item-status label {
+        .status-item label {
             margin-right: 10px;
         }
-        .control-buttons {
+        .botoes-controle {
             display: flex;
             gap: 10px;
             margin-top: 15px;
         }
-        .control-buttons button {
+        .botoes-controle button {
             padding: 10px;
             color: white;
             border: none;
             cursor: pointer;
         }
-        #generate-button {
+        #botao-gerar {
             background-color: #28a745;
         }
-        #generate-button:hover {
+        #botao-gerar:hover {
             background-color: #218838;
         }
-        #reset-tab-button {
+        #botao-redefinir-aba {
             background-color: #ffc107;
             color: black;
         }
-        #reset-all-button {
+        #botao-redefinir-tudo {
             background-color: #dc3545;
         }
-        #generated-list {
+        #lista-gerada {
             margin-top: 15px;
             background-color: white;
             border: 1px solid #ddd;
@@ -87,7 +87,7 @@
             white-space: pre-wrap;
             font-family: monospace;
         }
-        #copy-button {
+        #botao-copiar {
             background-color: #007bff;
             color: white;
             padding: 10px 15px;
@@ -95,14 +95,14 @@
             cursor: pointer;
             margin-top: 10px;
         }
-        #copy-button:hover {
+        #botao-copiar:hover {
             background-color: #0056b3;
         }
-        .location-options {
+        .opcoes-localizacao {
             display: none;
             margin-top: 5px;
         }
-        .location-options label {
+        .opcoes-localizacao label {
             margin-right: 10px;
         }
     </style>
@@ -111,37 +111,34 @@
     <div class="container">
         <h1>Lista de Reposição</h1>
         
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="embalagens">Embalagens</button>
-            <button class="tab-btn" data-tab="insumos">Insumos</button>
-            <button class="tab-btn" data-tab="utilitarios">Utilitários</button>
-            <button class="tab-btn" data-tab="bebidas">Bebidas</button>
+        <div class="abas">
+            <button class="botao-aba ativo" data-tab="embalagens">Embalagens</button>
+            <button class="botao-aba" data-tab="insumos">Insumos</button>
+            <button class="botao-aba" data-tab="utilitarios">Utilitários</button>
+            <button class="botao-aba" data-tab="bebidas">Bebidas</button>
         </div>
 
-        <div id="embalagens" class="tab-content active">
+        <div id="embalagens" class="conteudo-aba ativo">
     
         </div>
-        <div id="insumos" class="tab-content">
-            <!-- Insumos items will be dynamically populated -->
+        <div id="insumos" class="conteudo-aba">
         </div>
-        <div id="utilitarios" class="tab-content">
-            <!-- Utilitários items will be dynamically populated -->
+        <div id="utilitarios" class="conteudo-aba">
         </div>
-        <div id="bebidas" class="tab-content">
-            <!-- Bebidas items will be dynamically populated -->
+        <div id="bebidas" class="conteudo-aba">
         </div>
 
-        <div class="control-buttons">
-            <button id="generate-button">Gerar Lista</button>
-            <button id="reset-tab-button">Limpar Aba Atual</button>
-            <button id="reset-all-button">Limpar Todas as Seleções</button>
+        <div class="botoes-controle">
+            <button id="botao-gerar">Gerar Lista</button>
+            <button id="botao-redefinir-aba">Limpar Aba Atual</button>
+            <button id="botao-redefinir-tudo">Limpar Todas as Seleções</button>
         </div>
-        <div id="generated-list"></div>
-        <button id="copy-button">Copiar Lista</button>
+        <div id="lista-gerada"></div>
+        <button id="botao-copiar">Copiar Lista</button>
     </div>
 
     <script>
-        const itemLists = {
+        const listasItens = {
             embalagens: [
                 "Embalagem P",
                 "Embalagem M",
@@ -190,55 +187,53 @@
             ]
         };
 
-        // Tab switching
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
+        const botoesPesquisa = document.querySelectorAll('.botao-aba');
+        const conteudosAba = document.querySelectorAll('.conteudo-aba');
 
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tabId = btn.getAttribute('data-tab');
+        botoesPesquisa.forEach(botao => {
+            botao.addEventListener('click', () => {
+                const idAba = botao.getAttribute('data-tab');
 
-                tabBtns.forEach(b => b.classList.remove('active'));
-                tabContents.forEach(c => c.classList.remove('active'));
+                botoesPesquisa.forEach(b => b.classList.remove('ativo'));
+                conteudosAba.forEach(c => c.classList.remove('ativo'));
 
-                btn.classList.add('active');
-                document.getElementById(tabId).classList.add('active');
+                botao.classList.add('ativo');
+                document.getElementById(idAba).classList.add('ativo');
             });
         });
 
-        // Populate items dynamically
-        function populateItems() {
-            Object.keys(itemLists).forEach(category => {
-                const container = document.getElementById(category);
-                container.innerHTML = itemLists[category].map((itemName, index) => {
-                    const isBebida = category === 'bebidas';
+        function preencherItens() {
+            Object.keys(listasItens).forEach(categoria => {
+                const recipiente = document.getElementById(categoria);
+                recipiente.innerHTML = listasItens[categoria].map((nomeItem, indice) => {
+                    const eBebida = categoria === 'bebidas';
                     return `
                     <div class="item">
-                        <span>${itemName}</span>
-                        <div class="item-status">
-                            <div class="item-status-row">
+                        <span>${nomeItem}</span>
+                        <div class="status-item">
+                            <div class="linha-status-item">
                                 <label>
-                                    <input type="radio" name="${category}-${index}" value="tem" 
-                                        ${isBebida ? 'data-show-location="true"' : ''}> Tem
+                                    <input type="radio" name="${categoria}-${indice}" value="tem" 
+                                        ${eBebida ? 'data-show-location="true"' : ''}> Tem
                                 </label>
                                 <label>
-                                    <input type="radio" name="${category}-${index}" value="acabou"> Acabou
+                                    <input type="radio" name="${categoria}-${indice}" value="acabou"> Acabou
                                 </label>
                                 <input 
                                     type="text" 
-                                    class="quantity-input" 
+                                    class="entrada-quantidade" 
                                     style="display:none; width: 100px; margin-left: 10px;"
                                     placeholder="Info adicional"
                                 >
                             </div>
-                            ${isBebida ? `
-                            <div class="location-options">
-                                <div class="item-status-row">
+                            ${eBebida ? `
+                            <div class="opcoes-localizacao">
+                                <div class="linha-status-item">
                                     <label>
-                                        <input type="radio" name="${category}-${index}-location" value="estoque-geladeira"> Estoque e Geladeira
+                                        <input type="radio" name="${categoria}-${indice}-location" value="estoque-geladeira"> Estoque e Geladeira
                                     </label>
                                     <label>
-                                        <input type="radio" name="${category}-${index}-location" value="so-geladeira"> Só Geladeira
+                                        <input type="radio" name="${categoria}-${indice}-location" value="so-geladeira"> Só Geladeira
                                     </label>
                                 </div>
                             </div>` : ''}
@@ -246,32 +241,27 @@
                     </div>
                 `}).join('');
 
-                // Event listeners for radio buttons and quantity inputs
-                container.querySelectorAll('input[type="radio"]').forEach(radio => {
-                    radio.addEventListener('change', function() {
-                        const itemStatus = this.closest('.item-status');
-                        const quantityInput = itemStatus.querySelector('.quantity-input');
-                        const locationOptions = itemStatus.querySelector('.location-options');
+                recipiente.querySelectorAll('input[type="radio"]').forEach(radioBtn => {
+                    radioBtn.addEventListener('change', function() {
+                        const statusItem = this.closest('.status-item');
+                        const entradaQuantidade = statusItem.querySelector('.entrada-quantidade');
+                        const opcoesLocalizacao = statusItem.querySelector('.opcoes-localizacao');
                         
-                        // Mostrar a caixa de texto para ambas as opções
-                        quantityInput.style.display = 'block';
+                        entradaQuantidade.style.display = 'block';
                         
-                        // Para bebidas, mostrar ou esconder opções de localização
                         if (this.dataset.showLocation) {
                             if (this.value === 'tem') {
-                                locationOptions.style.display = 'block';
+                                opcoesLocalizacao.style.display = 'block';
                             } else {
-                                locationOptions.style.display = 'none';
-                                // Desmarcar opções de localização
-                                locationOptions.querySelectorAll('input[type="radio"]').forEach(locRadio => {
-                                    locRadio.checked = false;
+                                opcoesLocalizacao.style.display = 'none';
+                                opcoesLocalizacao.querySelectorAll('input[type="radio"]').forEach(radioLocal => {
+                                    radioLocal.checked = false;
                                 });
                             }
                         }
                         
-                        // Uncheck other radio in the same group
-                        const radioGroup = document.getElementsByName(this.name);
-                        radioGroup.forEach(r => {
+                        const grupoRadio = document.getElementsByName(this.name);
+                        grupoRadio.forEach(r => {
                             if (r !== this) r.checked = false;
                         });
                     });
@@ -279,99 +269,88 @@
             });
         }
 
-        // Generate list functionality
-        document.getElementById('generate-button').addEventListener('click', () => {
-            let reportText = "📋 Lista de Reposição:\n\n";
+        document.getElementById('botao-gerar').addEventListener('click', () => {
+            let textoRelatorio = "📋 Lista de Reposição:\n\n";
             
-            Object.keys(itemLists).forEach(category => {
-                const categoryContainer = document.getElementById(category);
-                const categoryItems = categoryContainer.querySelectorAll('.item');
-                const reportCategory = [];
+            Object.keys(listasItens).forEach(categoria => {
+                const recipienteCategoria = document.getElementById(categoria);
+                const itensCategoria = recipienteCategoria.querySelectorAll('.item');
+                const relatorioPorCategoria = [];
 
-                categoryItems.forEach(item => {
-                    const itemName = item.querySelector('span').textContent;
-                    const temRadio = item.querySelector('input[value="tem"]');
-                    const acabouRadio = item.querySelector('input[value="acabou"]');
-                    const quantityInput = item.querySelector('.quantity-input');
+                itensCategoria.forEach(item => {
+                    const nomeItem = item.querySelector('span').textContent;
+                    const radioBotaoTem = item.querySelector('input[value="tem"]');
+                    const radioBotaoAcabou = item.querySelector('input[value="acabou"]');
+                    const entradaQuantidade = item.querySelector('.entrada-quantidade');
                     
-                    // Adicional para bebidas
-                    const locationRadios = item.querySelectorAll('input[name$="-location"]');
-                    let locationText = '';
+                    const radiosLocalizacao = item.querySelectorAll('input[name$="-location"]');
+                    let textoLocalizacao = '';
 
-                    if (acabouRadio.checked) {
-                        reportCategory.push(`❌ ${itemName} `);
-                    } else if (temRadio.checked) {
-                        // Verificar opção de localização para bebidas
-                        if (locationRadios.length > 0) {
+                    if (radioBotaoAcabou.checked) {
+                        relatorioPorCategoria.push(`❌ ${nomeItem} `);
+                    } else if (radioBotaoTem.checked) {
+                        if (radiosLocalizacao.length > 0) {
                             const estoqueGeladeira = item.querySelector('input[value="estoque-geladeira"]');
                             const soGeladeira = item.querySelector('input[value="so-geladeira"]');
                             
                             if (estoqueGeladeira.checked) {
-                                locationText = ' (Estoque e geladeira)';
+                                textoLocalizacao = ' (Estoque e geladeira)';
                             } else if (soGeladeira.checked) {
-                                locationText = ' (Só geladeira)';
+                                textoLocalizacao = ' (Só geladeira)';
                             }
                         }
 
-                        const quantityText = quantityInput.value 
-                            ? ` - ${quantityInput.value}` 
+                        const textoQuantidade = entradaQuantidade.value 
+                            ? ` - ${entradaQuantidade.value}` 
                             : '';
-                        reportCategory.push(`✅ ${itemName}${quantityText}${locationText}`);
+                        relatorioPorCategoria.push(`✅ ${nomeItem}${textoQuantidade}${textoLocalizacao}`);
                     }
                 });
 
-                if (reportCategory.length > 0) {
-                    reportText += `*${category.charAt(0).toUpperCase() + category.slice(1)}:*\n`;
-                    reportText += reportCategory.join('\n') + '\n\n';
+                if (relatorioPorCategoria.length > 0) {
+                    textoRelatorio += `*${categoria.charAt(0).toUpperCase() + categoria.slice(1)}:*\n`;
+                    textoRelatorio += relatorioPorCategoria.join('\n') + '\n\n';
                 }
             });
 
-            // Display in the generated list div
-            document.getElementById('generated-list').textContent = reportText;
+            document.getElementById('lista-gerada').textContent = textoRelatorio;
         });
 
-        // Reset current tab functionality
-        document.getElementById('reset-tab-button').addEventListener('click', () => {
-            // Find the currently active tab content
-            const activeTabContent = document.querySelector('.tab-content.active');
+        document.getElementById('botao-redefinir-aba').addEventListener('click', () => {
+            const conteudoAbaAtiva = document.querySelector('.conteudo-aba.ativo');
             
-            // Reset all radios and quantity inputs in the current tab
-            activeTabContent.querySelectorAll('input[type="radio"]').forEach(radio => {
-                radio.checked = false;
+            conteudoAbaAtiva.querySelectorAll('input[type="radio"]').forEach(radioBtn => {
+                radioBtn.checked = false;
             });
-            activeTabContent.querySelectorAll('.quantity-input').forEach(input => {
-                input.value = '';
-                input.style.display = 'none';
+            conteudoAbaAtiva.querySelectorAll('.entrada-quantidade').forEach(entrada => {
+                entrada.value = '';
+                entrada.style.display = 'none';
             });
-            activeTabContent.querySelectorAll('.location-options').forEach(locationOptions => {
-                locationOptions.style.display = 'none';
+            conteudoAbaAtiva.querySelectorAll('.opcoes-localizacao').forEach(opcoesLocalizacao => {
+                opcoesLocalizacao.style.display = 'none';
             });
         });
 
-        // Reset all tabs functionality
-        document.getElementById('reset-all-button').addEventListener('click', () => {
-            // Reset all radios and quantity inputs across all tabs
-            document.querySelectorAll('input[type="radio"]').forEach(radio => {
-                radio.checked = false;
+        document.getElementById('botao-redefinir-tudo').addEventListener('click', () => {
+            document.querySelectorAll('input[type="radio"]').forEach(radioBtn => {
+                radioBtn.checked = false;
             });
-            document.querySelectorAll('.quantity-input').forEach(input => {
-                input.value = '';
-                input.style.display = 'none';
+            document.querySelectorAll('.entrada-quantidade').forEach(entrada => {
+                entrada.value = '';
+                entrada.style.display = 'none';
             });
-            document.querySelectorAll('.location-options').forEach(locationOptions => {
-                locationOptions.style.display = 'none';
+            document.querySelectorAll('.opcoes-localizacao').forEach(opcoesLocalizacao => {
+                opcoesLocalizacao.style.display = 'none';
             });
             
-            // Clear generated list
-            document.getElementById('generated-list').textContent = '';
+            document.getElementById('lista-gerada').textContent = '';
         });
 
-        // Copy functionality
-        document.getElementById('copy-button').addEventListener('click', () => {
-            const generatedList = document.getElementById('generated-list').textContent;
+        document.getElementById('botao-copiar').addEventListener('click', () => {
+            const listaGerada = document.getElementById('lista-gerada').textContent;
 
-            if (generatedList.trim() !== '') {
-                navigator.clipboard.writeText(generatedList).then(() => {
+            if (listaGerada.trim() !== '') {
+                navigator.clipboard.writeText(listaGerada).then(() => {
                     alert('Lista copiada para a área de transferência!');
                 }).catch(err => {
                     console.error('Erro ao copiar a lista:', err);
@@ -381,8 +360,7 @@
             }
         });
 
-        // Initialize
-        populateItems();
+        preencherItens();
     </script>
 </body>
 </html>
