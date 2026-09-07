@@ -5,211 +5,134 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Reposição</title>
     <style>
-        :root {
-            --primary-color: #007bff;
-            --primary-hover: #0056b3;
-            --success-color: #28a745;
-            --success-hover: #218838;
-            --warning-color: #ffc107;
-            --warning-hover: #e0a800;
-            --danger-color: #dc3545;
-            --danger-hover: #c82333;
-            --bg-color: #f8f9fa;
-            --card-bg: #ffffff;
-            --border-color: #e0e0e0;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 900px;
+            font-family: Arial, sans-serif;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: var(--bg-color);
-            color: #333;
+            background-color: #f4f4f4;
         }
-
-        .container {
-            background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 25px;
-        }
-        
         .abas {
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
             margin-bottom: 20px;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
         }
-
         .botao-aba {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            background-color: #f1f3f5;
-            font-weight: 600;
-            color: #495057;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            background-color: #f1f1f1;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
-
-        .botao-aba:hover {
-            background-color: #e9ecef;
-        }
-
         .botao-aba.ativo {
-            background-color: var(--primary-color);
+            background-color: #007bff;
             color: white;
-            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
         }
-
         .conteudo-aba {
             display: none;
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+            background-color: white;
+            border: 1px solid #ddd;
             padding: 15px;
         }
-
         .conteudo-aba.ativo {
             display: block;
-            animation: fadeIn 0.3s ease-in-out;
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         .item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 10px;
+            padding: 10px;
             border-bottom: 1px solid #eee;
-            flex-wrap: wrap;
-            gap: 10px;
         }
-
-        .item:last-child {
-            border-bottom: none;
-        }
-
-        .item > span {
-            font-weight: 500;
-            font-size: 16px;
-        }
-
         .status-item {
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 8px;
         }
-
         .linha-status-item {
             display: flex;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
+            margin-top: 5px;
         }
-
-        .linha-status-item label {
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        .status-item label {
+            margin-right: 10px;
         }
-
-        .entrada-quantidade {
-            padding: 6px 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-            transition: border-color 0.2s;
-        }
-
-        .entrada-quantidade:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
-
-        .opcoes-localizacao {
-            display: none;
-            background-color: #f8f9fa;
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: 1px dashed #ccc;
-            width: 100%;
-        }
-
         .botoes-controle {
             display: flex;
-            flex-wrap: wrap;
             gap: 10px;
-            margin-top: 25px;
+            margin-top: 15px;
         }
-
-        .botoes-controle button, #botao-copiar {
-            padding: 12px 20px;
-            font-weight: bold;
-            border-radius: 6px;
+        .botoes-controle button {
+            padding: 10px;
+            color: white;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
         }
-
-        .botoes-controle button:active, #botao-copiar:active {
-            transform: scale(0.98);
+        #botao-gerar {
+            background-color: #28a745;
         }
-
-        #botao-gerar { background-color: var(--success-color); color: white; }
-        #botao-gerar:hover { background-color: var(--success-hover); }
-
-        #botao-redefinir-aba { background-color: var(--warning-color); color: #212529; }
-        #botao-redefinir-aba:hover { background-color: var(--warning-hover); }
-
-        #botao-redefinir-tudo { background-color: var(--danger-color); color: white; }
-        #botao-redefinir-tudo:hover { background-color: var(--danger-hover); }
-
-        #botao-copiar { 
-            background-color: var(--primary-color); 
-            color: white; 
-            margin-top: 15px;
-            width: 100%;
-            font-size: 16px;
+        #botao-gerar:hover {
+            background-color: #218838;
         }
-        #botao-copiar:hover { background-color: var(--primary-hover); }
-
+        #botao-redefinir-aba {
+            background-color: #ffc107;
+            color: black;
+        }
+        #botao-redefinir-tudo {
+            background-color: #dc3545;
+        }
         #lista-gerada {
-            margin-top: 20px;
-            background-color: #fdfdfd;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
+            margin-top: 15px;
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 15px;
             white-space: pre-wrap;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 15px;
-            min-height: 100px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            font-family: monospace;
+        }
+        #botao-copiar {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        #botao-copiar:hover {
+            background-color: #0056b3;
+        }
+        .opcoes-localizacao {
+            display: none;
+            margin-top: 5px;
+        }
+        .opcoes-localizacao label {
+            margin-right: 10px;
+        }
+        /* Estilos do recurso de adicionar item personalizado */
+        .adicionar-item-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ccc;
+        }
+        .adicionar-item-container input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+        .adicionar-item-container button {
+            padding: 8px 15px;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .adicionar-item-container button:hover {
+            background-color: #5a6268;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📋 Lista de Reposição</h1>
+        <h1>Lista de Reposição</h1>
         
         <div class="abas">
             <button class="botao-aba ativo" data-tab="embalagens">Embalagens</button>
@@ -226,110 +149,120 @@
         <div class="botoes-controle">
             <button id="botao-gerar">Gerar Lista</button>
             <button id="botao-redefinir-aba">Limpar Aba Atual</button>
-            <button id="botao-redefinir-tudo">Limpar Tudo</button>
+            <button id="botao-redefinir-tudo">Limpar Todas as Seleções</button>
         </div>
-        
-        <div id="lista-gerada">Sua lista aparecerá aqui...</div>
+        <div id="lista-gerada"></div>
         <button id="botao-copiar">Copiar Lista</button>
     </div>
 
     <script>
-        const listasItens = {
-            embalagens: [
-                "Embalagem P", "Embalagem M", "Embalagem G"
-            ],
-            insumos: [
-                "Milho", "Óleo", "Sal de preparo", "Açúcar", 
-                "Essência vermelha", "Essência de manteiga", 
-                "Essência de coco", "Leite condensado"
-            ],
-            utilitarios: [
-                "Guardanapos", "Canudos", "Sal em sachê", 
-                "Papel toalha", "Saco de lixo"
-            ],
-            bebidas: [
-                "Água sem gás", "Água com gás", "Coca-Cola", "Coca-Cola Zero",
-                "Guaraná Antártica", "Guaraná Antártica Zero", "Fanta-Uva",
-                "Fanta-Laranja", "Schweppes Citrus", "Pepsi", "Sprite",
-                "H2O Limão", "H2O Limoneto", "Monster", "Redbull",
-                "Guaravita", "Guaraviton", "Gatorade", "Ice Tea",
-                "Mate", "Mineirinho", "Del Valle"
-            ]
-        };
+        document.addEventListener('DOMContentLoaded', () => {
+            const listasItens = {
+                embalagens: [
+                    "Embalagem P", "Embalagem M", "Embalagem G"
+                ],
+                insumos: [
+                    "Milho", "Óleo", "Sal de preparo", "Açúcar", 
+                    "Essência vermelha", "Essência de manteiga", 
+                    "Essência de coco", "Leite condensado"
+                ],
+                utilitarios: [
+                    "Guardanapos", "Canudos", "Sal em sachê", 
+                    "Papel toalha", "Saco de lixo"
+                ],
+                bebidas: [
+                    "Água sem gás", "Água com gás", "Coca-Cola", "Coca-Cola Zero",
+                    "Guaraná Antártica", "Guaraná Antártica Zero", "Fanta-Uva",
+                    "Fanta-Laranja", "Schweppes Citrus", "Pepsi", "Sprite",
+                    "H2O Limão", "H2O Limoneto", "Monster", "Redbull",
+                    "Guaravita", "Guaraviton", "Gatorade", "Ice Tea",
+                    "Mate", "Mineirinho", "Del Valle"
+                ]
+            };
 
-        const botoesPesquisa = document.querySelectorAll('.botao-aba');
-        const conteudosAba = document.querySelectorAll('.conteudo-aba');
+            // Lógica das Abas
+            const botoesPesquisa = document.querySelectorAll('.botao-aba');
+            const conteudosAba = document.querySelectorAll('.conteudo-aba');
 
-        // Navegação das Abas
-        botoesPesquisa.forEach(botao => {
-            botao.addEventListener('click', () => {
-                const idAba = botao.getAttribute('data-tab');
+            botoesPesquisa.forEach(botao => {
+                botao.addEventListener('click', () => {
+                    const idAba = botao.getAttribute('data-tab');
 
-                botoesPesquisa.forEach(b => b.classList.remove('ativo'));
-                conteudosAba.forEach(c => c.classList.remove('ativo'));
+                    botoesPesquisa.forEach(b => b.classList.remove('ativo'));
+                    conteudosAba.forEach(c => c.classList.remove('ativo'));
 
-                botao.classList.add('ativo');
-                document.getElementById(idAba).classList.add('ativo');
+                    botao.classList.add('ativo');
+                    document.getElementById(idAba).classList.add('ativo');
+                });
             });
-        });
 
-        // Preencher os itens na tela
-        function preencherItens() {
-            Object.keys(listasItens).forEach(categoria => {
-                const recipiente = document.getElementById(categoria);
-                recipiente.innerHTML = listasItens[categoria].map((nomeItem, indice) => {
-                    const eBebida = categoria === 'bebidas';
-                    return `
-                    <div class="item">
-                        <span>${nomeItem}</span>
-                        <div class="status-item">
+            // Função para gerar o HTML de um item (padrão ou personalizado)
+            function criarItemHTML(categoria, nomeItem, indice) {
+                const eBebida = categoria === 'bebidas';
+                return `
+                <div class="item">
+                    <span>${nomeItem}</span>
+                    <div class="status-item">
+                        <div class="linha-status-item">
+                            <label>
+                                <input type="radio" name="${categoria}-${indice}" value="tem" 
+                                    ${eBebida ? 'data-show-location="true"' : ''}> Tem
+                            </label>
+                            <label>
+                                <input type="radio" name="${categoria}-${indice}" value="acabou"> Acabou
+                            </label>
+                            
+                            <input 
+                                type="number" 
+                                class="entrada-quantidade" 
+                                min="0"
+                                style="display:none; width: 60px; margin-left: 10px;"
+                                placeholder="Qtd"
+                            >
+                            
+                            <input 
+                                type="text" 
+                                class="entrada-observacao" 
+                                style="display:none; width: 100px; margin-left: 10px;"
+                                placeholder="Obs (Opcional)"
+                            >
+                        </div>
+                        ${eBebida ? `
+                        <div class="opcoes-localizacao">
                             <div class="linha-status-item">
                                 <label>
-                                    <input type="radio" name="${categoria}-${indice}" value="tem" 
-                                        ${eBebida ? 'data-show-location="true"' : ''}> Tem
+                                    <input type="radio" name="${categoria}-${indice}-location" value="estoque-geladeira"> Estoque e Geladeira
                                 </label>
                                 <label>
-                                    <input type="radio" name="${categoria}-${indice}" value="acabou"> Acabou
+                                    <input type="radio" name="${categoria}-${indice}-location" value="so-geladeira"> Só Geladeira
                                 </label>
-                                <input 
-                                    type="text" 
-                                    class="entrada-quantidade" 
-                                    style="display:none; width: 140px;"
-                                    placeholder=""
-                                >
                             </div>
-                            ${eBebida ? `
-                            <div class="opcoes-localizacao">
-                                <div class="linha-status-item">
-                                    <label>
-                                        <input type="radio" name="${categoria}-${indice}-location" value="estoque-geladeira"> Estoque e Geladeira
-                                    </label>
-                                    <label>
-                                        <input type="radio" name="${categoria}-${indice}-location" value="so-geladeira"> Só Geladeira
-                                    </label>
-                                </div>
-                            </div>` : ''}
-                        </div>
+                        </div>` : ''}
                     </div>
-                `}).join('');
+                </div>`;
+            }
 
-                // Adicionar lógica de clique nos botões de rádio
-                recipiente.querySelectorAll('input[type="radio"]:not([name$="-location"])').forEach(radioBtn => {
+            // Função para aplicar os eventos de clique aos rádios/inputs de um item
+            function adicionarEventosAoItem(itemElement) {
+                itemElement.querySelectorAll('input[type="radio"]:not([name$="-location"])').forEach(radioBtn => {
                     radioBtn.addEventListener('change', function() {
                         const statusItem = this.closest('.status-item');
                         const entradaQuantidade = statusItem.querySelector('.entrada-quantidade');
+                        const entradaObservacao = statusItem.querySelector('.entrada-observacao');
                         const opcoesLocalizacao = statusItem.querySelector('.opcoes-localizacao');
                         
-                        entradaQuantidade.style.display = 'block';
+                        entradaQuantidade.value = '';
+                        entradaObservacao.value = '';
                         
-                        // Muda o placeholder dependendo se "Tem" ou "Acabou"
                         if (this.value === 'tem') {
-                            entradaQuantidade.placeholder = "Qtd (ex: 5 uni)";
-                            if (opcoesLocalizacao && this.dataset.showLocation) {
+                            entradaQuantidade.style.display = 'block';
+                            entradaObservacao.style.display = 'none';
+                            if (this.dataset.showLocation && opcoesLocalizacao) {
                                 opcoesLocalizacao.style.display = 'block';
                             }
-                        } else {
-                            entradaQuantidade.placeholder = "Obs (Opcional)";
+                        } else if (this.value === 'acabou') {
+                            entradaQuantidade.style.display = 'none';
+                            entradaObservacao.style.display = 'block';
                             if (opcoesLocalizacao) {
                                 opcoesLocalizacao.style.display = 'none';
                                 opcoesLocalizacao.querySelectorAll('input[type="radio"]').forEach(radioLocal => {
@@ -339,104 +272,177 @@
                         }
                     });
                 });
-            });
-        }
+            }
 
-        // Lógica de Gerar a Lista
-        document.getElementById('botao-gerar').addEventListener('click', () => {
-            let textoRelatorio = "📋 *Lista de Reposição:*\n\n";
-            let temItens = false;
-            
-            Object.keys(listasItens).forEach(categoria => {
-                const recipienteCategoria = document.getElementById(categoria);
-                const itensCategoria = recipienteCategoria.querySelectorAll('.item');
-                const relatorioPorCategoria = [];
+            // Preencher Itens ao iniciar
+            function preencherItens() {
+                Object.keys(listasItens).forEach(categoria => {
+                    const recipiente = document.getElementById(categoria);
+                    recipiente.innerHTML = ''; // Limpa antes de preencher
 
-                itensCategoria.forEach(item => {
-                    const nomeItem = item.querySelector('span').textContent;
-                    const radioBotaoTem = item.querySelector('input[value="tem"]');
-                    const radioBotaoAcabou = item.querySelector('input[value="acabou"]');
-                    const entradaQuantidade = item.querySelector('.entrada-quantidade');
+                    // Container que segura os itens da lista
+                    const divListaItens = document.createElement('div');
+                    divListaItens.className = 'itens-wrapper';
+
+                    // Gera os itens padrão da categoria
+                    listasItens[categoria].forEach((nomeItem, indice) => {
+                        divListaItens.insertAdjacentHTML('beforeend', criarItemHTML(categoria, nomeItem, indice));
+                    });
                     
-                    const radiosLocalizacao = item.querySelectorAll('input[name$="-location"]');
-                    let textoLocalizacao = '';
+                    recipiente.appendChild(divListaItens);
 
-                    if (radioBotaoAcabou && radioBotaoAcabou.checked) {
-                        const obs = entradaQuantidade.value ? ` (Obs: ${entradaQuantidade.value})` : '';
-                        relatorioPorCategoria.push(`❌ ${nomeItem}${obs}`);
-                    } else if (radioBotaoTem && radioBotaoTem.checked) {
-                        if (radiosLocalizacao.length > 0) {
-                            const estoqueGeladeira = item.querySelector('input[value="estoque-geladeira"]');
-                            const soGeladeira = item.querySelector('input[value="so-geladeira"]');
+                    // Adiciona eventos aos itens gerados
+                    divListaItens.querySelectorAll('.item').forEach(itemEl => {
+                        adicionarEventosAoItem(itemEl);
+                    });
+
+                    // Cria os campos de adicionar item personalizado no final da aba
+                    const customContainer = document.createElement('div');
+                    customContainer.className = 'adicionar-item-container';
+                    customContainer.innerHTML = `
+                        <input type="text" class="input-novo-item" placeholder="Novo item extra...">
+                        <button type="button" class="btn-adicionar-item">Adicionar Item</button>
+                    `;
+
+                    // Lógica do botão "Adicionar Item"
+                    const btnAdd = customContainer.querySelector('.btn-adicionar-item');
+                    const inputAdd = customContainer.querySelector('.input-novo-item');
+
+                    const adicionarNovoItem = () => {
+                        const novoNome = inputAdd.value.trim();
+                        if (novoNome !== '') {
+                            const novoIndice = Date.now(); // Indice único para não conflitar
+                            const novoItemHTML = criarItemHTML(categoria, novoNome, novoIndice);
                             
-                            if (estoqueGeladeira && estoqueGeladeira.checked) {
-                                textoLocalizacao = ' (Estoque e geladeira)';
-                            } else if (soGeladeira && soGeladeira.checked) {
-                                textoLocalizacao = ' (Só geladeira)';
-                            }
-                        }
+                            // Insere no DOM
+                            divListaItens.insertAdjacentHTML('beforeend', novoItemHTML);
+                            
+                            // Adiciona os eventos (zera texto, aparece opção geladeira, etc)
+                            const novoElemento = divListaItens.lastElementChild;
+                            adicionarEventosAoItem(novoElemento);
 
-                        const textoQuantidade = entradaQuantidade.value 
-                            ? ` - Qtd: ${entradaQuantidade.value}` 
-                            : '';
+                            inputAdd.value = ''; // limpa o input após adicionar
+                        }
+                    };
+
+                    btnAdd.addEventListener('click', adicionarNovoItem);
+                    
+                    // Permite dar 'Enter' no teclado para adicionar
+                    inputAdd.addEventListener('keypress', (e) => {
+                        if(e.key === 'Enter') adicionarNovoItem();
+                    });
+
+                    recipiente.appendChild(customContainer);
+                });
+            }
+
+            // Lógica do Gerador da Lista
+            document.getElementById('botao-gerar').addEventListener('click', () => {
+                let textoRelatorio = "📋 Lista de Reposição:\n\n";
+                let temItens = false;
+                
+                Object.keys(listasItens).forEach(categoria => {
+                    const recipienteCategoria = document.getElementById(categoria);
+                    const itensCategoria = recipienteCategoria.querySelectorAll('.item');
+                    const relatorioPorCategoria = [];
+
+                    itensCategoria.forEach(item => {
+                        const nomeItem = item.querySelector('span').textContent;
+                        const radioBotaoTem = item.querySelector('input[value="tem"]');
+                        const radioBotaoAcabou = item.querySelector('input[value="acabou"]');
+                        const entradaQuantidade = item.querySelector('.entrada-quantidade');
+                        const entradaObservacao = item.querySelector('.entrada-observacao');
                         
-                        relatorioPorCategoria.push(`✅ ${nomeItem}${textoQuantidade}${textoLocalizacao}`);
+                        const radiosLocalizacao = item.querySelectorAll('input[name$="-location"]');
+                        let textoLocalizacao = '';
+
+                        if (radioBotaoAcabou && radioBotaoAcabou.checked) {
+                            const obs = entradaObservacao.value ? ` (Obs: ${entradaObservacao.value})` : '';
+                            relatorioPorCategoria.push(`❌ ${nomeItem}${obs}`);
+                        } else if (radioBotaoTem && radioBotaoTem.checked) {
+                            if (radiosLocalizacao.length > 0) {
+                                const estoqueGeladeira = item.querySelector('input[value="estoque-geladeira"]');
+                                const soGeladeira = item.querySelector('input[value="so-geladeira"]');
+                                
+                                if (estoqueGeladeira && estoqueGeladeira.checked) {
+                                    textoLocalizacao = ' (Estoque e geladeira)';
+                                } else if (soGeladeira && soGeladeira.checked) {
+                                    textoLocalizacao = ' (Só geladeira)';
+                                }
+                            }
+
+                            // Só inclui a quantia se ela NÃO for "0" e NÃO for vazia
+                            const textoQuantidade = (entradaQuantidade.value && entradaQuantidade.value !== "0") 
+                                ? ` - Qtd: ${entradaQuantidade.value}` 
+                                : '';
+                            relatorioPorCategoria.push(`✅ ${nomeItem}${textoQuantidade}${textoLocalizacao}`);
+                        }
+                    });
+
+                    if (relatorioPorCategoria.length > 0) {
+                        temItens = true;
+                        textoRelatorio += `*${categoria.charAt(0).toUpperCase() + categoria.slice(1)}:*\n`;
+                        textoRelatorio += relatorioPorCategoria.join('\n') + '\n\n';
                     }
                 });
 
-                if (relatorioPorCategoria.length > 0) {
-                    temItens = true;
-                    textoRelatorio += `*${categoria.charAt(0).toUpperCase() + categoria.slice(1)}:*\n`;
-                    textoRelatorio += relatorioPorCategoria.join('\n') + '\n\n';
+                if (temItens) {
+                    document.getElementById('lista-gerada').textContent = textoRelatorio;
+                } else {
+                    document.getElementById('lista-gerada').textContent = 'Nenhum item selecionado.';
                 }
             });
 
-            if(!temItens) {
-                textoRelatorio = "Nenhum item foi selecionado.";
-            }
+            // Botão Limpar Aba
+            document.getElementById('botao-redefinir-aba').addEventListener('click', () => {
+                const conteudoAbaAtiva = document.querySelector('.conteudo-aba.ativo');
+                
+                conteudoAbaAtiva.querySelectorAll('input[type="radio"]').forEach(radioBtn => {
+                    radioBtn.checked = false;
+                });
+                conteudoAbaAtiva.querySelectorAll('input[type="text"]:not(.input-novo-item), input[type="number"]').forEach(entrada => {
+                    entrada.value = '';
+                    entrada.style.display = 'none';
+                });
+                conteudoAbaAtiva.querySelectorAll('.opcoes-localizacao').forEach(opcoesLocalizacao => {
+                    opcoesLocalizacao.style.display = 'none';
+                });
+            });
 
-            document.getElementById('lista-gerada').textContent = textoRelatorio;
+            // Botão Limpar Tudo
+            document.getElementById('botao-redefinir-tudo').addEventListener('click', () => {
+                document.querySelectorAll('input[type="radio"]').forEach(radioBtn => {
+                    radioBtn.checked = false;
+                });
+                document.querySelectorAll('input[type="text"]:not(.input-novo-item), input[type="number"]').forEach(entrada => {
+                    entrada.value = '';
+                    entrada.style.display = 'none';
+                });
+                document.querySelectorAll('.opcoes-localizacao').forEach(opcoesLocalizacao => {
+                    opcoesLocalizacao.style.display = 'none';
+                });
+                
+                document.getElementById('lista-gerada').textContent = '';
+            });
+
+            // Botão Copiar Lista
+            document.getElementById('botao-copiar').addEventListener('click', () => {
+                const listaGerada = document.getElementById('lista-gerada').textContent;
+
+                if (listaGerada.trim() !== '' && listaGerada !== 'Nenhum item selecionado.') {
+                    navigator.clipboard.writeText(listaGerada).then(() => {
+                        alert('Lista copiada para a área de transferência!');
+                    }).catch(err => {
+                        console.error('Erro ao copiar a lista:', err);
+                    });
+                } else {
+                    alert('A lista está vazia e não pode ser copiada.');
+                }
+            });
+
+            // Chama a criação dos itens da lista inicial
+            preencherItens();
         });
-
-        // Limpar Aba Atual
-        document.getElementById('botao-redefinir-aba').addEventListener('click', () => {
-            const conteudoAbaAtiva = document.querySelector('.conteudo-aba.ativo');
-            
-            conteudoAbaAtiva.querySelectorAll('input[type="radio"]').forEach(radioBtn => {
-                radioBtn.checked = false;
-            });
-            conteudoAbaAtiva.querySelectorAll('.entrada-quantidade').forEach(entrada => {
-                entrada.value = '';
-                entrada.style.display = 'none';
-            });
-            conteudoAbaAtiva.querySelectorAll('.opcoes-localizacao').forEach(opcoesLocalizacao => {
-                opcoesLocalizacao.style.display = 'none';
-            });
-        });
-
-        // Limpar Tudo
-        document.getElementById('botao-redefinir-tudo').addEventListener('click', () => {
-            document.querySelectorAll('input[type="radio"]').forEach(radioBtn => {
-                radioBtn.checked = false;
-            });
-            document.querySelectorAll('.entrada-quantidade').forEach(entrada => {
-                entrada.value = '';
-                entrada.style.display = 'none';
-            });
-            document.querySelectorAll('.opcoes-localizacao').forEach(opcoesLocalizacao => {
-                opcoesLocalizacao.style.display = 'none';
-            });
-            
-            document.getElementById('lista-gerada').textContent = 'Sua lista aparecerá aqui...';
-        });
-
-        // Copiar para a área de transferência
-        document.getElementById('botao-copiar').addEventListener('click', () => {
-            const listaGerada = document.getElementById('lista-gerada').textContent;
-
-            if (listaGerada.trim() !== '' && listaGerada !== 'Sua lista aparecerá aqui...' && listaGerada !== 'Nenhum item foi selecionado.') {
-                navigator.clipboard.writeText(listaGerada).then(() => {
-                    alert('Lista copiada com sucesso!');
-                }).catch(err => {
-                    console.error('Erro ao copiar a lista:', err);
-                    alert('Fal
+    </script>
+</body>
+</html>
